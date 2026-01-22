@@ -33,13 +33,19 @@ export default function Home() {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [locationCoords, setLocationCoords] = useState(null);
+
   const getCurrentLocation = () => {
     setIsLocating(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          // In a real app, you'd reverse geocode this
-          setLocation(`${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`);
+          const coords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          setLocationCoords(coords);
+          setLocation(`${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`);
           setIsLocating(false);
         },
         (error) => {
@@ -55,7 +61,7 @@ export default function Home() {
     
     setIsSubmitting(true);
     try {
-      const request = await base44.entities.ServiceRequest.create({
+      const requestData = {
         service_type: selectedService,
         location_address: location,
         vehicle_make: vehicleInfo.make,
@@ -64,7 +70,15 @@ export default function Home() {
         vehicle_color: vehicleInfo.color,
         description: description,
         status: 'pending'
-      });
+      };
+
+      // Add coordinates if available
+      if (locationCoords) {
+        requestData.location_lat = locationCoords.lat;
+        requestData.location_lng = locationCoords.lng;
+      }
+
+      const request = await base44.entities.ServiceRequest.create(requestData);
       
       navigate(createPageUrl('Tracking') + `?id=${request.id}`);
     } catch (error) {
@@ -84,10 +98,11 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <h1 className="text-2xl font-bold">RoadRescue</h1>
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6972a57489604bd98d3c2e02/763cdf91d_AutoLyftRecoverylogo.png"
+                alt="AutoLyft Recovery"
+                className="h-16 w-auto object-contain"
+              />
             </div>
             <p className="text-slate-400">Get help fast when you need it most</p>
           </motion.div>

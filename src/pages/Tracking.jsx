@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import StatusTracker from '@/components/StatusTracker';
+import Map from '@/components/Map';
 import { cn } from '@/lib/utils';
 
 const serviceLabels = {
@@ -121,13 +122,12 @@ export default function Tracking() {
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white">
         <div className="max-w-lg mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-slate-400 text-sm">Request #{request.id?.slice(0, 8)}</p>
-              <h1 className="text-xl font-bold">
-                {serviceLabels[request.service_type]}
-              </h1>
-            </div>
+          <div className="flex items-center justify-between mb-4">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6972a57489604bd98d3c2e02/763cdf91d_AutoLyftRecoverylogo.png"
+              alt="AutoLyft Recovery"
+              className="h-8 w-auto object-contain"
+            />
             {isActive && (
               <Button
                 variant="ghost"
@@ -139,6 +139,12 @@ export default function Tracking() {
                 Cancel
               </Button>
             )}
+          </div>
+          <div>
+            <p className="text-slate-400 text-sm">Request #{request.id?.slice(0, 8)}</p>
+            <h1 className="text-xl font-bold">
+              {serviceLabels[request.service_type]}
+            </h1>
           </div>
         </div>
       </div>
@@ -154,6 +160,30 @@ export default function Tracking() {
             estimatedArrival={request.estimated_arrival}
           />
         </motion.div>
+
+        {/* Live Map */}
+        {isActive && (request.location_lat && request.location_lng) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="mt-4 bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-md"
+          >
+            <div className="p-4 border-b border-slate-100">
+              <h3 className="font-semibold text-slate-900">Live Tracking</h3>
+              <p className="text-sm text-slate-500 mt-0.5">Real-time location updates</p>
+            </div>
+            <Map
+              userLocation={[request.location_lat, request.location_lng]}
+              providerLocation={request.provider_location_lat && request.provider_location_lng 
+                ? [request.provider_location_lat, request.provider_location_lng]
+                : null}
+              userLabel="Your Location"
+              providerLabel={request.provider_name || "Provider"}
+              height="300px"
+            />
+          </motion.div>
+        )}
 
         {/* Request Details */}
         <motion.div

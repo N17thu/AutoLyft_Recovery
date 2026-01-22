@@ -10,6 +10,9 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// Import Leaflet CSS globally
+import 'leaflet/dist/leaflet.css';
+
 const navItems = [
   { name: 'Home', icon: Home, page: 'Home' },
   { name: 'Providers', icon: MapPin, page: 'Providers' },

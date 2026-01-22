@@ -39,7 +39,14 @@ export default function History() {
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white">
         <div className="max-w-2xl mx-auto px-6 py-8">
-          <h1 className="text-2xl font-bold mb-6">Request History</h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Request History</h1>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6972a57489604bd98d3c2e02/763cdf91d_AutoLyftRecoverylogo.png"
+              alt="AutoLyft Recovery"
+              className="h-8 w-auto object-contain"
+            />
+          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4">
