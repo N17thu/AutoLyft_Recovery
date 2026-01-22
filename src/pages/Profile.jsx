@@ -114,6 +114,13 @@ export default function Profile() {
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white">
         <div className="max-w-lg mx-auto px-6 py-8">
+          <div className="flex items-center justify-between mb-4">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6972a57489604bd98d3c2e02/763cdf91d_AutoLyftRecoverylogo.png"
+              alt="AutoLyft Recovery"
+              className="h-10 w-auto object-contain"
+            />
+          </div>
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
               <span className="text-2xl font-bold text-white">
