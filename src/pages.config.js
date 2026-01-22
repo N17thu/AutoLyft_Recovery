@@ -3,6 +3,7 @@ import Tracking from './pages/Tracking';
 import Providers from './pages/Providers';
 import History from './pages/History';
 import Profile from './pages/Profile';
+import ProviderDashboard from './pages/ProviderDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -12,6 +13,7 @@ export const PAGES = {
     "Providers": Providers,
     "History": History,
     "Profile": Profile,
+    "ProviderDashboard": ProviderDashboard,
 }
 
 export const pagesConfig = {

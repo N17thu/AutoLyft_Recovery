@@ -3,6 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+
+// Auth check component
+function useAuthCheck() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        navigate(createPageUrl('Login'));
+      }
+    } catch (error) {
+      navigate(createPageUrl('Login'));
+    }
+  };
+}
 import { 
   MapPin, 
   AlertTriangle, 
@@ -19,6 +39,7 @@ import ServiceTypeCard from '@/components/ServiceTypeCard';
 const serviceTypes = ['towing', 'tire_change', 'battery_jump', 'fuel_delivery', 'lockout', 'general_repair'];
 
 export default function Home() {
+  useAuthCheck(); // Protect this page
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState(null);

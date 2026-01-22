@@ -21,8 +21,8 @@ const navItems = [
 ];
 
 export default function Layout({ children, currentPageName }) {
-  // Hide bottom nav on tracking page for cleaner view
-  const hideNav = currentPageName === 'Tracking';
+  // Hide bottom nav on tracking page and provider dashboard
+  const hideNav = ['Tracking', 'Login', 'ProviderDashboard'].includes(currentPageName);
 
   return (
     <div className="min-h-screen bg-slate-50">
