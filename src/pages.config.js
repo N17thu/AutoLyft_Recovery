@@ -4,6 +4,7 @@ import Providers from './pages/Providers';
 import History from './pages/History';
 import Profile from './pages/Profile';
 import ProviderDashboard from './pages/ProviderDashboard';
+import Welcome from './pages/Welcome';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "History": History,
     "Profile": Profile,
     "ProviderDashboard": ProviderDashboard,
+    "Welcome": Welcome,
 }
 
 export const pagesConfig = {

@@ -37,6 +37,21 @@ const serviceTypes = [
 export default function Providers() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        navigate(createPageUrl('Welcome'));
+      }
+    } catch (error) {
+      navigate(createPageUrl('Welcome'));
+    }
+  };
   const [selectedServices, setSelectedServices] = useState([]);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 

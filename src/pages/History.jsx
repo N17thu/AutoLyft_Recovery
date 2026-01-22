@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import {
   Clock,
   CheckCircle2,
@@ -13,7 +15,23 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import RequestCard from '@/components/RequestCard';
 
 export default function History() {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        navigate(createPageUrl('Welcome'));
+      }
+    } catch (error) {
+      navigate(createPageUrl('Welcome'));
+    }
+  };
 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ['requests'],

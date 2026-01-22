@@ -102,6 +102,21 @@ export default function Tracking() {
     );
   }
 
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        navigate(createPageUrl('Welcome'));
+      }
+    } catch (error) {
+      navigate(createPageUrl('Welcome'));
+    }
+  };
+
   if (!request) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">

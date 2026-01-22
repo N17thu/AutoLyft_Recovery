@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
+import { createPageUrl } from '@/utils';
 import {
   User,
   Car,
@@ -57,6 +58,7 @@ export default function Profile() {
       setVehicles(userData.vehicles || []);
     } catch (error) {
       console.error('Error loading user:', error);
+      window.location.href = createPageUrl('Welcome');
     } finally {
       setIsLoading(false);
     }

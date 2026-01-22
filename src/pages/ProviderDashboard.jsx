@@ -74,7 +74,7 @@ export default function ProviderDashboard() {
         navigate(createPageUrl('Home'));
       }
     } catch (error) {
-      navigate(createPageUrl('Login'));
+      navigate(createPageUrl('Welcome'));
     }
   };
 

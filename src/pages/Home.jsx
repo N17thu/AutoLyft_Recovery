@@ -16,10 +16,10 @@ function useAuthCheck() {
     try {
       const isAuth = await base44.auth.isAuthenticated();
       if (!isAuth) {
-        navigate(createPageUrl('Login'));
+        navigate(createPageUrl('Welcome'));
       }
     } catch (error) {
-      navigate(createPageUrl('Login'));
+      navigate(createPageUrl('Welcome'));
     }
   };
 }
