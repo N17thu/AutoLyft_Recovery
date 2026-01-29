@@ -98,10 +98,7 @@ export default function ProviderDashboard() {
           location: event.data.location_address
         });
         
-        // Play notification sound
-        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZSA0PVqzn77BdGAg+ltryy3ojBSh+zPLaizsIGGS57OihUBELTKXh8bllHAU2jdXyzn0pBSd6yvDdlUIME1yw6OyrWBUIQ5zd8sFsIAUuhM/z1YU2Bhxqvu7mnEsODlOq5fGzYBoGPJPY88p5KAUme8rx3I4+CRZiturqpVITC0mi4PK8aB8FM4nU8tGALgYfccXv45ZFDBFYr+fxr10XCECa3PLEcSMFLIHO8tiJOQcZaLvt559NEAxPp+PwtmMcBjiP1/HNeisFI3fH8N+RQAoUXrTp66hVFApGnt/yvmwhBTCG0fPTgjQGHW/A7eSaRw0PVqzl77BeGQc9ltrzwnoiBSh+zPLaizsIGGS56+mjTxELTKXh8bllHAU1jdT';
-        audio.volume = 0.3;
-        audio.play().catch(() => {});
+
         
         // Auto-hide notification after 10 seconds
         setTimeout(() => setNotification(null), 10000);
