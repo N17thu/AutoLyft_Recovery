@@ -16,7 +16,8 @@ import {
   Loader2,
   LogOut,
   Settings,
-  TrendingUp
+  TrendingUp,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +33,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import Map from '@/components/Map';
+import ProviderSettings from '@/components/ProviderSettings';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -59,6 +61,8 @@ export default function ProviderDashboard() {
   const [showAcceptDialog, setShowAcceptDialog] = useState(false);
   const [estimatedTime, setEstimatedTime] = useState('');
   const [activeTab, setActiveTab] = useState('available');
+  const [showSettings, setShowSettings] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     loadUser();
@@ -80,9 +84,35 @@ export default function ProviderDashboard() {
 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ['provider-requests'],
-    queryFn: () => base44.entities.ServiceRequest.list('-created_date'),
-    refetchInterval: 5000 // Refresh every 5 seconds
+    queryFn: () => base44.entities.ServiceRequest.list('-created_date')
   });
+
+  // Real-time notification system
+  useEffect(() => {
+    const unsubscribe = base44.entities.ServiceRequest.subscribe((event) => {
+      if (event.type === 'create' && event.data.status === 'pending') {
+        // Show notification for new request
+        setNotification({
+          id: event.data.id,
+          service: event.data.service_type,
+          location: event.data.location_address
+        });
+        
+        // Play notification sound
+        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZSA0PVqzn77BdGAg+ltryy3ojBSh+zPLaizsIGGS57OihUBELTKXh8bllHAU2jdXyzn0pBSd6yvDdlUIME1yw6OyrWBUIQ5zd8sFsIAUuhM/z1YU2Bhxqvu7mnEsODlOq5fGzYBoGPJPY88p5KAUme8rx3I4+CRZiturqpVITC0mi4PK8aB8FM4nU8tGALgYfccXv45ZFDBFYr+fxr10XCECa3PLEcSMFLIHO8tiJOQcZaLvt559NEAxPp+PwtmMcBjiP1/HNeisFI3fH8N+RQAoUXrTp66hVFApGnt/yvmwhBTCG0fPTgjQGHW/A7eSaRw0PVqzl77BeGQc9ltrzwnoiBSh+zPLaizsIGGS56+mjTxELTKXh8bllHAU1jdT';
+        audio.volume = 0.3;
+        audio.play().catch(() => {});
+        
+        // Auto-hide notification after 10 seconds
+        setTimeout(() => setNotification(null), 10000);
+        
+        // Refresh requests
+        queryClient.invalidateQueries({ queryKey: ['provider-requests'] });
+      }
+    });
+    
+    return unsubscribe;
+  }, [queryClient]);
 
   const acceptMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.ServiceRequest.update(id, data),
@@ -159,15 +189,26 @@ export default function ProviderDashboard() {
               alt="AutoLyft Recovery"
               className="h-10 w-auto object-contain"
             />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => base44.auth.logout()}
-              className="text-slate-300 hover:text-white"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSettings(true)}
+                className="text-slate-300 hover:text-white"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => base44.auth.logout()}
+                className="text-slate-300 hover:text-white"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
@@ -288,6 +329,41 @@ export default function ProviderDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Notification Toast */}
+      {notification && (
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -100 }}
+          className="fixed top-4 right-4 z-50 max-w-md"
+        >
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-2xl p-4 flex items-start gap-3">
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+              <Bell className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold mb-1">New Request Available!</h4>
+              <p className="text-sm text-orange-100">
+                {serviceLabels[notification.service]} • {notification.location}
+              </p>
+            </div>
+            <button
+              onClick={() => setNotification(null)}
+              className="text-white/80 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Settings Dialog */}
+      <ProviderSettings
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        userId={user?.id}
+      />
 
       {/* Accept Dialog */}
       <Dialog open={showAcceptDialog} onOpenChange={setShowAcceptDialog}>
