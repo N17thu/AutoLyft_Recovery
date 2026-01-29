@@ -48,10 +48,22 @@ export default function Tracking() {
   const requestId = urlParams.get('id');
 
   useEffect(() => {
+    checkAuth();
     if (requestId) {
       loadRequest();
     }
   }, [requestId]);
+
+  const checkAuth = async () => {
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) {
+        navigate(createPageUrl('Welcome'));
+      }
+    } catch (error) {
+      navigate(createPageUrl('Welcome'));
+    }
+  };
 
   const loadRequest = async () => {
     try {
@@ -101,21 +113,6 @@ export default function Tracking() {
       </div>
     );
   }
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      const isAuth = await base44.auth.isAuthenticated();
-      if (!isAuth) {
-        navigate(createPageUrl('Welcome'));
-      }
-    } catch (error) {
-      navigate(createPageUrl('Welcome'));
-    }
-  };
 
   if (!request) {
     return (
