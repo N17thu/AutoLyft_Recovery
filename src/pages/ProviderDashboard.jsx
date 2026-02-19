@@ -355,6 +355,7 @@ export default function ProviderDashboard() {
           </div>
         </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Settings Dialog */}
       <ProviderSettings
