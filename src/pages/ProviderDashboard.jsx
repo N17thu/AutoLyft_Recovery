@@ -328,6 +328,7 @@ export default function ProviderDashboard() {
       </div>
 
       {/* Notification Toast */}
+      <AnimatePresence>
       {notification && (
         <motion.div
           initial={{ opacity: 0, y: -100 }}
