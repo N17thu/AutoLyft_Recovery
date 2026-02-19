@@ -329,32 +329,33 @@ export default function ProviderDashboard() {
 
       {/* Notification Toast */}
       <AnimatePresence>
-      {notification && (
-        <motion.div
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -100 }}
-          className="fixed top-4 right-4 z-50 max-w-md"
-        >
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-2xl p-4 flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
-              <Bell className="w-5 h-5" />
+        {notification && (
+          <motion.div
+            key="notification"
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            className="fixed top-4 right-4 z-50 max-w-md"
+          >
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-2xl p-4 flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+                <Bell className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold mb-1">New Request Available!</h4>
+                <p className="text-sm text-orange-100">
+                  {serviceLabels[notification.service]} • {notification.location}
+                </p>
+              </div>
+              <button
+                onClick={() => setNotification(null)}
+                className="text-white/80 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <div className="flex-1">
-              <h4 className="font-semibold mb-1">New Request Available!</h4>
-              <p className="text-sm text-orange-100">
-                {serviceLabels[notification.service]} • {notification.location}
-              </p>
-            </div>
-            <button
-              onClick={() => setNotification(null)}
-              className="text-white/80 hover:text-white"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Settings Dialog */}
