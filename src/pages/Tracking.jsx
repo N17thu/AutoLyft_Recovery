@@ -67,10 +67,11 @@ export default function Tracking() {
 
   const loadRequest = async () => {
     try {
-      const requests = await base44.entities.ServiceRequest.filter({ id: requestId });
-      if (requests.length > 0) {
-        setRequest(requests[0]);
-        if (requests[0].status === 'completed' && !requests[0].rating) {
+      const requests = await base44.entities.ServiceRequest.list();
+      const found = requests.find(r => r.id === requestId);
+      if (found) {
+        setRequest(found);
+        if (found.status === 'completed' && !found.rating) {
           setShowRating(true);
         }
       }
