@@ -1,0 +1,85 @@
+{
+  "name": "ServiceRequest",
+  "type": "object",
+  "properties": {
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "towing",
+        "tire_change",
+        "battery_jump",
+        "fuel_delivery",
+        "lockout",
+        "general_repair"
+      ],
+      "description": "Type of assistance needed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "location_address": {
+      "type": "string",
+      "description": "Address where assistance is needed"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "vehicle_make": {
+      "type": "string"
+    },
+    "vehicle_model": {
+      "type": "string"
+    },
+    "vehicle_year": {
+      "type": "string"
+    },
+    "vehicle_color": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional details about the issue"
+    },
+    "provider_id": {
+      "type": "string",
+      "description": "Assigned service provider ID"
+    },
+    "provider_name": {
+      "type": "string"
+    },
+    "provider_location_lat": {
+      "type": "number"
+    },
+    "provider_location_lng": {
+      "type": "number"
+    },
+    "estimated_arrival": {
+      "type": "number",
+      "description": "Estimated arrival time in minutes"
+    },
+    "final_cost": {
+      "type": "number"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "review": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "service_type",
+    "location_address"
+  ]
+}
